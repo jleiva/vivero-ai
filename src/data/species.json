@@ -1,0 +1,74 @@
+[
+  {
+    "commonName": "Bixa orellana",
+    "scientificName": "Bixa orellana",
+    "potSizeMinGal": 1,
+    "rootBehavior": "Deep taproot",
+    "wateringDryDays": 2,
+    "wateringRainyDays": 7,
+    "fertilization": "Light — compost + EM"
+  },
+{
+"id": "inga_edulis",
+"common": "Inga edulis (Guaba)",
+"category": "timber",
+"potDepthCm": 45,
+"potSizeGal": 3,
+"watering": { "drySeasonDays": 2, "rainySeasonDays": 5 },
+"notes": "Fast growth, nitrogen fixer"
+},
+{
+"id": "gliricidia_sepium",
+"common": "Gliricidia sepium",
+"category": "timber",
+"potDepthCm": 40,
+"potSizeGal": 2,
+"watering": { "drySeasonDays": 4, "rainySeasonDays": 10 },
+"notes": "Nitrogen fixer, chop & drop"
+},
+{
+"id": "enterolobium_cyclocarpum",
+"common": "Enterolobium cyclocarpum (Guanacaste)",
+"category": "timber",
+"potDepthCm": 50,
+"potSizeGal": 3,
+"watering": { "drySeasonDays": 3, "rainySeasonDays": 7 },
+"notes": "Deep taproot, large canopy"
+},
+{
+"id": "syzygium_aqueum",
+"common": "Syzygium aqueum (Watery Rose Apple)",
+"category": "fruit",
+"potDepthCm": 40,
+"potSizeGal": 3,
+"watering": { "drySeasonDays": 2, "rainySeasonDays": 5 },
+"notes": "High moisture requirements"
+},
+{
+"id": "persea_americana",
+"common": "Persea americana (Avocado)",
+"category": "fruit",
+"potDepthCm": 50,
+"potSizeGal": 5,
+"watering": { "drySeasonDays": 2, "rainySeasonDays": 4 },
+"notes": "Sensitive to root rot"
+},
+{
+"id": "citrus_sp",
+"common": "Citrus spp.",
+"category": "fruit",
+"potDepthCm": 40,
+"potSizeGal": 3,
+"watering": { "drySeasonDays": 2, "rainySeasonDays": 4 },
+"notes": "Loves organic matter + potassium"
+},
+{
+"id": "annona_muricata",
+"common": "Annona muricata (Guanábana)",
+"category": "fruit",
+"potDepthCm": 40,
+"potSizeGal": 3,
+"watering": { "drySeasonDays": 2, "rainySeasonDays": 5 },
+"notes": "Shade tolerant early growth"
+}
+]
