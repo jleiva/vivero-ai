@@ -1,74 +1,370 @@
 [
   {
-    "commonName": "Bixa orellana",
+    "id": 1,
+    "commonName": "Achiote",
     "scientificName": "Bixa orellana",
+    "category": "dye",
+    "description": "Small tree producing red seeds used for natural dye and cooking. Fast-growing with ornamental flowers.",
     "potSizeMinGal": 1,
-    "rootBehavior": "Deep taproot",
-    "wateringDryDays": 2,
-    "wateringRainyDays": 7,
-    "fertilization": "Light — compost + EM"
+    "potSizeMaxGal": 3,
+    "potDepthCm": 25,
+    "rootBehavior": "deep_taproot",
+    "wateringDrySeasonDays": 2,
+    "wateringRainySeasonDays": 7,
+    "shadeRequirements": "full_sun_to_partial",
+    "shadeTolerancePercent": 30,
+    "fertilization": {
+      "type": "light_organic",
+      "notes": "Prefers compost + EM. Light feeder, avoid over-fertilization.",
+      "frequencyDays": 30,
+      "npkRatio": "balanced",
+      "organicInputs": ["compost_tea", "em", "bokashi"]
+    },
+    "hardeningRules": {
+      "totalWeeks": 4,
+      "shadeReductionSchedule": [
+        { "week": 1, "shadePercent": 70, "windExposureHours": 1 },
+        { "week": 2, "shadePercent": 50, "windExposureHours": 2 },
+        { "week": 3, "shadePercent": 30, "windExposureHours": 3 },
+        { "week": 4, "shadePercent": 0, "windExposureHours": 4 }
+      ],
+      "notes": "Gradually reduce shade over 4 weeks. Acclimate to full sun slowly."
+    },
+    "transplantReadiness": {
+      "minHeightCm": 30,
+      "minMonthsInPot": 4,
+      "rootCheckCriteria": "white_root_tips_visible",
+      "leafMaturity": "at_least_6_true_leaves"
+    },
+    "commonIssues": [
+      "Root circling in small pots",
+      "Yellowing from over-watering",
+      "Susceptible to aphids"
+    ],
+    "growthRate": "fast",
+    "nativeToRegion": true,
+    "nitrogenFixer": false
   },
-{
-"id": "inga_edulis",
-"common": "Inga edulis (Guaba)",
-"category": "timber",
-"potDepthCm": 45,
-"potSizeGal": 3,
-"watering": { "drySeasonDays": 2, "rainySeasonDays": 5 },
-"notes": "Fast growth, nitrogen fixer"
-},
-{
-"id": "gliricidia_sepium",
-"common": "Gliricidia sepium",
-"category": "timber",
-"potDepthCm": 40,
-"potSizeGal": 2,
-"watering": { "drySeasonDays": 4, "rainySeasonDays": 10 },
-"notes": "Nitrogen fixer, chop & drop"
-},
-{
-"id": "enterolobium_cyclocarpum",
-"common": "Enterolobium cyclocarpum (Guanacaste)",
-"category": "timber",
-"potDepthCm": 50,
-"potSizeGal": 3,
-"watering": { "drySeasonDays": 3, "rainySeasonDays": 7 },
-"notes": "Deep taproot, large canopy"
-},
-{
-"id": "syzygium_aqueum",
-"common": "Syzygium aqueum (Watery Rose Apple)",
-"category": "fruit",
-"potDepthCm": 40,
-"potSizeGal": 3,
-"watering": { "drySeasonDays": 2, "rainySeasonDays": 5 },
-"notes": "High moisture requirements"
-},
-{
-"id": "persea_americana",
-"common": "Persea americana (Avocado)",
-"category": "fruit",
-"potDepthCm": 50,
-"potSizeGal": 5,
-"watering": { "drySeasonDays": 2, "rainySeasonDays": 4 },
-"notes": "Sensitive to root rot"
-},
-{
-"id": "citrus_sp",
-"common": "Citrus spp.",
-"category": "fruit",
-"potDepthCm": 40,
-"potSizeGal": 3,
-"watering": { "drySeasonDays": 2, "rainySeasonDays": 4 },
-"notes": "Loves organic matter + potassium"
-},
-{
-"id": "annona_muricata",
-"common": "Annona muricata (Guanábana)",
-"category": "fruit",
-"potDepthCm": 40,
-"potSizeGal": 3,
-"watering": { "drySeasonDays": 2, "rainySeasonDays": 5 },
-"notes": "Shade tolerant early growth"
-}
+  {
+    "id": 2,
+    "commonName": "Guaba",
+    "scientificName": "Inga edulis",
+    "category": "timber_nitrogen_fixer",
+    "description": "Fast-growing nitrogen-fixing tree. Excellent for agroforestry, produces edible sweet pods.",
+    "potSizeMinGal": 2,
+    "potSizeMaxGal": 5,
+    "potDepthCm": 45,
+    "rootBehavior": "deep_taproot",
+    "wateringDrySeasonDays": 2,
+    "wateringRainySeasonDays": 5,
+    "shadeRequirements": "full_sun",
+    "shadeTolerancePercent": 20,
+    "fertilization": {
+      "type": "nitrogen_fixer_light",
+      "notes": "Fixes its own nitrogen. Use EM and light compost only. Avoid nitrogen-heavy fertilizers.",
+      "frequencyDays": 45,
+      "npkRatio": "low_nitrogen",
+      "organicInputs": ["em", "wood_ash", "compost_tea"]
+    },
+    "hardeningRules": {
+      "totalWeeks": 4,
+      "shadeReductionSchedule": [
+        { "week": 1, "shadePercent": 60, "windExposureHours": 1 },
+        { "week": 2, "shadePercent": 40, "windExposureHours": 2 },
+        { "week": 3, "shadePercent": 20, "windExposureHours": 3 },
+        { "week": 4, "shadePercent": 0, "windExposureHours": 4 }
+      ],
+      "notes": "Hardy tree, can handle direct sun earlier than most."
+    },
+    "transplantReadiness": {
+      "minHeightCm": 40,
+      "minMonthsInPot": 5,
+      "rootCheckCriteria": "strong_taproot_visible",
+      "leafMaturity": "at_least_8_compound_leaves"
+    },
+    "commonIssues": [
+      "Fast growth can lead to weak stems without proper hardening",
+      "Sensitive to root disturbance during transplant"
+    ],
+    "growthRate": "very_fast",
+    "nativeToRegion": true,
+    "nitrogenFixer": true
+  },
+  {
+    "id": 3,
+    "commonName": "Madero Negro",
+    "scientificName": "Gliricidia sepium",
+    "category": "timber_nitrogen_fixer",
+    "description": "Living fence post and nitrogen-fixer. Excellent for chop-and-drop mulching and erosion control.",
+    "potSizeMinGal": 2,
+    "potSizeMaxGal": 3,
+    "potDepthCm": 40,
+    "rootBehavior": "fibrous_deep",
+    "wateringDrySeasonDays": 4,
+    "wateringRainySeasonDays": 10,
+    "shadeRequirements": "full_sun",
+    "shadeTolerancePercent": 15,
+    "fertilization": {
+      "type": "nitrogen_fixer_minimal",
+      "notes": "Self-sufficient nitrogen fixer. Only needs EM and occasional wood ash for minerals.",
+      "frequencyDays": 60,
+      "npkRatio": "minimal",
+      "organicInputs": ["em", "wood_ash"]
+    },
+    "hardeningRules": {
+      "totalWeeks": 3,
+      "shadeReductionSchedule": [
+        { "week": 1, "shadePercent": 50, "windExposureHours": 2 },
+        { "week": 2, "shadePercent": 30, "windExposureHours": 3 },
+        { "week": 3, "shadePercent": 0, "windExposureHours": 4 }
+      ],
+      "notes": "Extremely hardy. Can handle full sun quickly."
+    },
+    "transplantReadiness": {
+      "minHeightCm": 35,
+      "minMonthsInPot": 4,
+      "rootCheckCriteria": "dense_root_ball",
+      "leafMaturity": "at_least_6_true_leaves"
+    },
+    "commonIssues": [
+      "Very drought-resistant once established",
+      "Can become invasive if not managed"
+    ],
+    "growthRate": "fast",
+    "nativeToRegion": true,
+    "nitrogenFixer": true
+  },
+  {
+    "id": 4,
+    "commonName": "Guanacaste",
+    "scientificName": "Enterolobium cyclocarpum",
+    "category": "timber",
+    "description": "Costa Rica's national tree. Massive canopy, deep roots. Excellent for timber and shade.",
+    "potSizeMinGal": 3,
+    "potSizeMaxGal": 7,
+    "potDepthCm": 50,
+    "rootBehavior": "very_deep_taproot",
+    "wateringDrySeasonDays": 3,
+    "wateringRainySeasonDays": 7,
+    "shadeRequirements": "full_sun",
+    "shadeTolerancePercent": 10,
+    "fertilization": {
+      "type": "moderate_organic",
+      "notes": "Heavy feeder when young. Needs compost, bokashi, and regular EM applications.",
+      "frequencyDays": 21,
+      "npkRatio": "balanced",
+      "organicInputs": ["bokashi", "compost_tea", "em", "wood_ash"]
+    },
+    "hardeningRules": {
+      "totalWeeks": 4,
+      "shadeReductionSchedule": [
+        { "week": 1, "shadePercent": 70, "windExposureHours": 1 },
+        { "week": 2, "shadePercent": 50, "windExposureHours": 2 },
+        { "week": 3, "shadePercent": 30, "windExposureHours": 3 },
+        { "week": 4, "shadePercent": 10, "windExposureHours": 4 }
+      ],
+      "notes": "Requires gradual hardening due to large leaf surface area."
+    },
+    "transplantReadiness": {
+      "minHeightCm": 50,
+      "minMonthsInPot": 6,
+      "rootCheckCriteria": "strong_taproot_30cm_minimum",
+      "leafMaturity": "woody_stem_development"
+    },
+    "commonIssues": [
+      "Taproot can circle if pot too shallow",
+      "Requires very deep pot for healthy development",
+      "Sensitive to transplant shock"
+    ],
+    "growthRate": "moderate",
+    "nativeToRegion": true,
+    "nitrogenFixer": false
+  },
+  {
+    "id": 5,
+    "commonName": "Pomarrosa",
+    "scientificName": "Syzygium aqueum",
+    "category": "fruit",
+    "description": "Watery rose apple. High moisture requirements. Produces refreshing tropical fruits.",
+    "potSizeMinGal": 3,
+    "potSizeMaxGal": 5,
+    "potDepthCm": 40,
+    "rootBehavior": "shallow_fibrous",
+    "wateringDrySeasonDays": 2,
+    "wateringRainySeasonDays": 5,
+    "shadeRequirements": "partial_shade_to_full_sun",
+    "shadeTolerancePercent": 40,
+    "fertilization": {
+      "type": "heavy_organic",
+      "notes": "Water-loving fruit tree. Needs consistent moisture and regular feeding with compost tea and EM.",
+      "frequencyDays": 14,
+      "npkRatio": "high_potassium",
+      "organicInputs": ["compost_tea", "em", "bokashi", "wood_ash"]
+    },
+    "hardeningRules": {
+      "totalWeeks": 4,
+      "shadeReductionSchedule": [
+        { "week": 1, "shadePercent": 70, "windExposureHours": 1 },
+        { "week": 2, "shadePercent": 60, "windExposureHours": 1 },
+        { "week": 3, "shadePercent": 40, "windExposureHours": 2 },
+        { "week": 4, "shadePercent": 20, "windExposureHours": 3 }
+      ],
+      "notes": "Keep consistently moist during hardening. Can tolerate partial shade."
+    },
+    "transplantReadiness": {
+      "minHeightCm": 40,
+      "minMonthsInPot": 6,
+      "rootCheckCriteria": "dense_fibrous_roots",
+      "leafMaturity": "glossy_mature_leaves"
+    },
+    "commonIssues": [
+      "Very sensitive to drought",
+      "Root rot if over-watered in poor drainage",
+      "Leaf scorch in intense sun without hardening"
+    ],
+    "growthRate": "moderate",
+    "nativeToRegion": false,
+    "nitrogenFixer": false
+  },
+  {
+    "id": 6,
+    "commonName": "Aguacate",
+    "scientificName": "Persea americana",
+    "category": "fruit",
+    "description": "Avocado tree. Deep-rooted, sensitive to root rot. Requires excellent drainage.",
+    "potSizeMinGal": 5,
+    "potSizeMaxGal": 10,
+    "potDepthCm": 50,
+    "rootBehavior": "deep_taproot",
+    "wateringDrySeasonDays": 2,
+    "wateringRainySeasonDays": 4,
+    "shadeRequirements": "full_sun",
+    "shadeTolerancePercent": 20,
+    "fertilization": {
+      "type": "moderate_organic",
+      "notes": "Sensitive to salt and over-fertilization. Prefers light, frequent organic feeding.",
+      "frequencyDays": 21,
+      "npkRatio": "low_nitrogen_high_potassium",
+      "organicInputs": ["compost_tea", "em", "wood_ash"]
+    },
+    "hardeningRules": {
+      "totalWeeks": 4,
+      "shadeReductionSchedule": [
+        { "week": 1, "shadePercent": 60, "windExposureHours": 1 },
+        { "week": 2, "shadePercent": 40, "windExposureHours": 2 },
+        { "week": 3, "shadePercent": 20, "windExposureHours": 3 },
+        { "week": 4, "shadePercent": 0, "windExposureHours": 4 }
+      ],
+      "notes": "Critical: ensure perfect drainage during hardening. Root rot is common."
+    },
+    "transplantReadiness": {
+      "minHeightCm": 50,
+      "minMonthsInPot": 8,
+      "rootCheckCriteria": "strong_taproot_white_tips",
+      "leafMaturity": "woody_stem_base"
+    },
+    "commonIssues": [
+      "Extremely sensitive to root rot (Phytophthora)",
+      "Requires perfect drainage",
+      "Wilting from over-watering more common than drought stress",
+      "Chlorosis from poor soil pH"
+    ],
+    "growthRate": "slow_to_moderate",
+    "nativeToRegion": false,
+    "nitrogenFixer": false
+  },
+  {
+    "id": 7,
+    "commonName": "Cítricos",
+    "scientificName": "Citrus spp.",
+    "category": "fruit",
+    "description": "Citrus family (orange, lemon, lime). Loves organic matter and potassium. Grafted varieties preferred.",
+    "potSizeMinGal": 3,
+    "potSizeMaxGal": 7,
+    "potDepthCm": 40,
+    "rootBehavior": "fibrous_moderate",
+    "wateringDrySeasonDays": 2,
+    "wateringRainySeasonDays": 4,
+    "shadeRequirements": "full_sun",
+    "shadeTolerancePercent": 15,
+    "fertilization": {
+      "type": "heavy_organic",
+      "notes": "Heavy feeder. Loves compost, wood ash (potassium), and regular EM. Sensitive to nitrogen burn.",
+      "frequencyDays": 14,
+      "npkRatio": "balanced_high_potassium",
+      "organicInputs": ["compost_tea", "bokashi", "em", "wood_ash"]
+    },
+    "hardeningRules": {
+      "totalWeeks": 4,
+      "shadeReductionSchedule": [
+        { "week": 1, "shadePercent": 60, "windExposureHours": 1 },
+        { "week": 2, "shadePercent": 40, "windExposureHours": 2 },
+        { "week": 3, "shadePercent": 20, "windExposureHours": 3 },
+        { "week": 4, "shadePercent": 0, "windExposureHours": 4 }
+      ],
+      "notes": "Protect from strong winds. Grafted varieties may need staking."
+    },
+    "transplantReadiness": {
+      "minHeightCm": 40,
+      "minMonthsInPot": 6,
+      "rootCheckCriteria": "healthy_white_roots",
+      "leafMaturity": "dark_green_glossy_leaves"
+    },
+    "commonIssues": [
+      "Chlorosis (yellowing) from nutrient deficiency",
+      "Sensitive to micronutrient deficiencies (iron, zinc, manganese)",
+      "Aphids and leaf miners common",
+      "Graft union must stay above soil line"
+    ],
+    "growthRate": "moderate",
+    "nativeToRegion": false,
+    "nitrogenFixer": false
+  },
+  {
+    "id": 8,
+    "commonName": "Guanábana",
+    "scientificName": "Annona muricata",
+    "category": "fruit",
+    "description": "Soursop. Shade-tolerant when young. Produces large, delicious fruits. Prefers humid conditions.",
+    "potSizeMinGal": 3,
+    "potSizeMaxGal": 5,
+    "potDepthCm": 40,
+    "rootBehavior": "shallow_fibrous",
+    "wateringDrySeasonDays": 2,
+    "wateringRainySeasonDays": 5,
+    "shadeRequirements": "partial_shade_when_young",
+    "shadeTolerancePercent": 50,
+    "fertilization": {
+      "type": "moderate_organic",
+      "notes": "Prefers consistent moisture and organic feeding. Use compost tea and EM regularly.",
+      "frequencyDays": 21,
+      "npkRatio": "balanced",
+      "organicInputs": ["compost_tea", "em", "bokashi"]
+    },
+    "hardeningRules": {
+      "totalWeeks": 4,
+      "shadeReductionSchedule": [
+        { "week": 1, "shadePercent": 80, "windExposureHours": 0 },
+        { "week": 2, "shadePercent": 70, "windExposureHours": 1 },
+        { "week": 3, "shadePercent": 50, "windExposureHours": 2 },
+        { "week": 4, "shadePercent": 30, "windExposureHours": 2 }
+      ],
+      "notes": "Keep in partial shade even after hardening. Sensitive to intense direct sun."
+    },
+    "transplantReadiness": {
+      "minHeightCm": 35,
+      "minMonthsInPot": 6,
+      "rootCheckCriteria": "healthy_white_roots_abundant",
+      "leafMaturity": "mature_dark_green_leaves"
+    },
+    "commonIssues": [
+      "Sensitive to drought and leaf scorch",
+      "Prefers high humidity",
+      "Scale insects and mealybugs common",
+      "Benefits from partial shade even when mature"
+    ],
+    "growthRate": "moderate",
+    "nativeToRegion": false,
+    "nitrogenFixer": false
+  }
 ]

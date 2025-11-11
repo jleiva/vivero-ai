@@ -56,18 +56,44 @@ export default function TaskCard({ task, onToggle, onSkip }: Props) {
             <span className="text-xs text-gray-500 font-medium">{task.date}</span>
           </div>
           
-          {task.payload?.dosage && (
-            <p className="text-sm text-gray-600 mt-2 flex items-center gap-1">
-              <Droplet className="w-3.5 h-3.5" />
-              Dosis: {task.payload.dosage}
-            </p>
-          )}
-          
-          {task.payload?.note && (
-            <p className="text-sm text-gray-600 mt-1 italic">
-              {task.payload.note}
-            </p>
-          )}
+          {/* Watering */}
+{task.category === "water" && task.payload?.volumeLiters && (
+  <p className="text-sm text-gray-600 mt-2 flex items-center gap-1">
+    <Droplet className="w-3.5 h-3.5" />
+    Riego: {task.payload.volumeLiters} L
+    {task.payload.note && <span>· {task.payload.note}</span>}
+  </p>
+)}
+
+{/* Fertilize */}
+{task.category === "fertilize" && (
+  <p className="text-sm text-gray-600 mt-2">
+    Fertilizante: {task.payload.type} · {task.payload.dilution} · {task.payload.liters} L
+  </p>
+)}
+
+{/* EM */}
+{task.category === "em" && (
+  <p className="text-sm text-gray-600 mt-2">
+    EM: {task.payload.dilution} · {task.payload.liters} L
+    {task.payload.tip && <span> · {task.payload.tip}</span>}
+  </p>
+)}
+
+{/* Hardening */}
+{task.category === "hardening" && (
+  <p className="text-sm text-gray-600 mt-2">
+    Endurecimiento: Sombra {task.payload.shadePercent}% · {task.payload.durationHours}h
+  </p>
+)}
+
+{!["water","fertilize","em","hardening"].includes(task.category) && task.payload && (
+  <pre className="text-xs bg-gray-50 p-2 mt-2 rounded">
+    {JSON.stringify(task.payload, null, 2)}
+  </pre>
+)}
+
+
           
           <div className="flex gap-2 mt-3">
             <button

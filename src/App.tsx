@@ -1,26 +1,76 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Tasks from "./pages/Tasks";
 import Plants from "./pages/Plants";
-import { Navigation } from "./components/Navigation";
+import SpeciesLibrary from "./pages/SpeciesLibrary";
 import { seedFakeTasks } from "./db/seedFakeTasks";
-import { seedTestNursery } from './db/seedTestNursery'
+import { seedTestNursery } from "./db/seedTestNursery";
+import { speciesService } from "./services/speciesService";
+import SplashScreen from "./components/SplashScreen";
+import { Navigation } from "./components/Navigation";
 
 export default function App() {
+  const [isInitializing, setIsInitializing] = useState(true);
+  const [initError, setInitError] = useState<string | null>(null);
+
   useEffect(() => {
-    seedFakeTasks();
-    seedTestNursery();
+    const initializeApp = async () => {
+      try {
+        console.log("🚀 Initializing Vivero Maestro...");
+
+        // Initialize species data first
+        await speciesService.initialize();
+
+        // Then seed test data
+        await seedTestNursery();
+        await seedFakeTasks();
+
+        console.log("✅ App initialization complete");
+        setIsInitializing(false);
+      } catch (error) {
+        console.error("❌ App initialization failed:", error);
+        setInitError(error.message);
+        setIsInitializing(false);
+      }
+    };
+
+    initializeApp();
   }, []);
+
+  // Show loading screen while initializing
+  if (isInitializing) {
+    return <SplashScreen message="Cargando especies..." />;
+  }
+
+  // Show error if initialization failed
+  if (initError) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-red-50">
+        <div className="text-center p-8">
+          <h2 className="text-2xl font-bold text-red-700 mb-4">Error de Inicialización</h2>
+          <p className="text-red-600 mb-4">{initError}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+          >
+            Reintentar
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
-      <Navigation />
-      <Routes>
+    <Navigation />
+    <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/tasks" element={<Tasks />} />
       <Route path="/plants" element={<Plants />} />
-      </Routes>
+      <Route path="/species" element={<SpeciesLibrary />} />
+    </Routes>
     </>
+    
   );
 }
-

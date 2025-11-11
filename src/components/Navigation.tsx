@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Sprout, CheckCircle2, Leaf, Menu, X } from "lucide-react";
+import { Sprout, CheckCircle2, Leaf, Menu, X, BookOpen } from "lucide-react";
 import { useState } from "react";
 
 export function Navigation() {
@@ -9,7 +9,8 @@ export function Navigation() {
   const navItems = [
     { path: "/", label: "Inicio", icon: Sprout },
     { path: "/tasks", label: "Tareas", icon: CheckCircle2 },
-    { path: "/plants", label: "Plantas", icon: Leaf }
+    { path: "/plants", label: "Plantas", icon: Leaf },
+    { path: "/species", label: "Especies", icon: BookOpen }
   ];
 
   return (
