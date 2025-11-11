@@ -1,19 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Tasks from "./pages/Tasks";
 import Plants from "./pages/Plants";
 import SpeciesLibrary from "./pages/SpeciesLibrary";
 import SeasonCalendar from "./pages/SeasonCalendar";
+import NurserySetupWizard from "./pages/NurserySetupWizard";
+import NurserySettings from "./pages/NurserySettings";
 import { seedFakeTasks } from "./db/seedFakeTasks";
-import { seedTestNursery } from "./db/seedTestNursery";
+// import { seedTestNursery } from "./db/seedTestNursery";
 import { speciesService } from "./services/speciesService";
+import { nurseryService } from "./services/nurseryService";
 import SplashScreen from "./components/SplashScreen";
 import { Navigation } from "./components/Navigation";
 
 export default function App() {
   const [isInitializing, setIsInitializing] = useState(true);
   const [initError, setInitError] = useState<string | null>(null);
+  const [hasNursery, setHasNursery] = useState(false);
+
+  // Function to check nursery status
+  const checkNursery = async () => {
+    const nurseryExists = await nurseryService.hasNursery();
+    console.log('nurseryExists', nurseryExists);
+    setHasNursery(nurseryExists);
+    return nurseryExists;
+  };
 
   useEffect(() => {
     const initializeApp = async () => {
@@ -23,9 +35,13 @@ export default function App() {
         // Initialize species data first
         await speciesService.initialize();
 
-        // Then seed test data
-        await seedTestNursery();
-        await seedFakeTasks();
+        // Check if user has nursery
+        const nurseryExists = await checkNursery();
+
+        // Seed fake tasks only if nursery exists (for demo)
+        if (nurseryExists) {
+          await seedFakeTasks();
+        }
 
         console.log("✅ App initialization complete");
         setIsInitializing(false);
@@ -62,6 +78,16 @@ export default function App() {
     );
   }
 
+  // Redirect to setup if no nursery exists
+  if (!hasNursery) {
+    return (
+      <Routes>
+        <Route path="/setup" element={<NurserySetupWizard onComplete={checkNursery} />} />
+        <Route path="*" element={<Navigate to="/setup" replace />} />
+      </Routes>
+    );
+  }
+
   return (
     <>
     <Navigation />
@@ -71,6 +97,8 @@ export default function App() {
       <Route path="/plants" element={<Plants />} />
       <Route path="/species" element={<SpeciesLibrary />} />
       <Route path="/season" element={<SeasonCalendar />} />
+      <Route path="/settings/nursery" element={<NurserySettings />} />
+      <Route path="/setup" element={<Navigate to="/" replace />} />
     </Routes>
     </>
     
