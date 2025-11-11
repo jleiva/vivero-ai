@@ -18,6 +18,7 @@ import {
   ChevronUp,
   ArrowLeft
 } from "lucide-react";
+import { useWateringInterval } from "../hooks/useSeason";
 
 interface Species {
   id: number;
@@ -150,6 +151,10 @@ function ChecklistItem({ label, value }: { label: string; value: string }) {
 
 export default function SpeciesDetail({ species, onBack }: Props) {
   const [expandedSection, setExpandedSection] = useState<string | null>("overview");
+  const currentInterval = useWateringInterval(
+    species.wateringDrySeasonDays,
+    species.wateringRainySeasonDays
+  );
 
   const toggleSection = (section: string) => {
     setExpandedSection(expandedSection === section ? null : section);
@@ -243,6 +248,13 @@ export default function SpeciesDetail({ species, onBack }: Props) {
 
               {/* Description */}
               <p className="text-gray-700 mt-4 leading-relaxed">{species.description}</p>
+              <div>
+                <p className="text-gray-700 mt-4 leading-relaxed">Riego actual: Cada {currentInterval} días</p>
+                <p className="text-sm text-gray-600">
+                  (Temporada seca: cada {species.wateringDrySeasonDays}d, 
+                  Lluviosa: cada {species.wateringRainySeasonDays}d)
+                </p>
+              </div>
             </div>
           </div>
         </div>

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useTasks } from "../hooks/useTasks";
 import TaskCard from "../components/TaskCard";
+import { SeasonIndicator } from "../components/SeasonIndicator";
 import { db } from "../db/db";
 import { Sprout, Calendar, CheckCircle2, Plus, ArrowRight } from "lucide-react";
 
@@ -25,10 +26,10 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50">
-
       <main className="max-w-6xl mx-auto px-4 md:px-6 py-8">
+       <SeasonIndicator region="guanacaste" />
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8 mb-8">
           <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
             <div className="flex items-center justify-between">
               <div>

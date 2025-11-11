@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Tasks from "./pages/Tasks";
 import Plants from "./pages/Plants";
 import SpeciesLibrary from "./pages/SpeciesLibrary";
+import SeasonCalendar from "./pages/SeasonCalendar";
 import { seedFakeTasks } from "./db/seedFakeTasks";
 import { seedTestNursery } from "./db/seedTestNursery";
 import { speciesService } from "./services/speciesService";
@@ -69,6 +70,7 @@ export default function App() {
       <Route path="/tasks" element={<Tasks />} />
       <Route path="/plants" element={<Plants />} />
       <Route path="/species" element={<SpeciesLibrary />} />
+      <Route path="/season" element={<SeasonCalendar />} />
     </Routes>
     </>
     
