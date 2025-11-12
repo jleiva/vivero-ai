@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { db } from "../db/db";
 import { useLiveQuery } from "dexie-react-hooks";
-import { X, Calendar, Tag, FileText, Sprout } from "lucide-react";
+import { X, Calendar, Tag, FileText, Sprout, Home } from "lucide-react";
+import { nurseryService } from "../services/nurseryService";
 
 interface Props {
   isOpen: boolean;
@@ -13,14 +14,49 @@ export default function AddTaskModal({ isOpen, onClose }: Props) {
   const [category, setCategory] = useState<string>("water");
   const [payload, setPayload] = useState<string>("");
   const [plantingId, setPlantingId] = useState<number | null>(null);
+  const [selectedNurseryId, setSelectedNurseryId] = useState<number | null>(null);
+  const [plants, setPlants] = useState<any[]>([]);
 
-  const plants = useLiveQuery(() => db.plantings.toArray(), []) ?? [];
+  // Get all nurseries
+  const nurseries = useLiveQuery(() => db.nurseries.toArray(), []) ?? [];
+
+  // Load active nursery on mount
+  useEffect(() => {
+    const loadActiveNursery = async () => {
+      const activeNursery = await nurseryService.getActiveNursery();
+      if (activeNursery?.id) {
+        setSelectedNurseryId(activeNursery.id);
+      }
+    };
+    loadActiveNursery();
+  }, []);
+
+  // Load plants when nursery changes
+  useEffect(() => {
+    const loadPlants = async () => {
+      if (selectedNurseryId) {
+        const nurseryPlants = await db.plantings
+          .where("nurseryId")
+          .equals(selectedNurseryId)
+          .toArray();
+        setPlants(nurseryPlants);
+      } else {
+        setPlants([]);
+      }
+    };
+    loadPlants();
+  }, [selectedNurseryId]);
 
   if (!isOpen) return null;
 
   const handleAdd = async () => {
+    if (!selectedNurseryId) {
+      alert("Por favor selecciona un vivero");
+      return;
+    }
+
     await db.tasks.add({
-      nurseryId: 1,
+      nurseryId: selectedNurseryId,
       plantingId: plantingId || null,
       date,
       category,
@@ -30,6 +66,11 @@ export default function AddTaskModal({ isOpen, onClose }: Props) {
       completedAt: null,
     });
 
+    // Reset form
+    setDate(new Date().toISOString().slice(0, 10));
+    setCategory("water");
+    setPayload("");
+    setPlantingId(null);
     onClose();
   };
 
@@ -49,6 +90,40 @@ export default function AddTaskModal({ isOpen, onClose }: Props) {
 
         {/* Body */}
         <div className="p-6 space-y-4">
+          {/* Nursery Selection - Only show if multiple nurseries */}
+          {nurseries.length > 1 && (
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                <Home className="w-4 h-4" />
+                Vivero
+              </label>
+              <select
+                value={selectedNurseryId ?? ""}
+                onChange={(e) => {
+                  setSelectedNurseryId(e.target.value ? Number(e.target.value) : null);
+                  setPlantingId(null); // Reset plant selection when nursery changes
+                }}
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+              >
+                <option value="">Seleccionar vivero...</option>
+                {nurseries.map((nursery) => (
+                  <option key={nursery.id} value={nursery.id}>
+                    {nursery.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {/* Show nursery name if only one */}
+          {nurseries.length === 1 && (
+            <div className="bg-green-50 rounded-lg p-3 border border-green-200">
+              <p className="text-sm text-green-800">
+                <strong>Vivero:</strong> {nurseries[0].name}
+              </p>
+            </div>
+          )}
+
           {/* Date */}
           <div>
             <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
@@ -84,25 +159,36 @@ export default function AddTaskModal({ isOpen, onClose }: Props) {
             </select>
           </div>
 
-          {/* Plant selector */}
-          <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-              <Sprout className="w-4 h-4" />
-              Asignar a planta (opcional)
-            </label>
-            <select
-              value={plantingId ?? ""}
-              onChange={(e) => setPlantingId(e.target.value ? Number(e.target.value) : null)}
-              className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
-            >
-              <option value="">— General para el vivero —</option>
-              {plants.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.speciesName} — #{p.id}
-                </option>
-              ))}
-            </select>
-          </div>
+          {/* Plant selector - only if nursery selected */}
+          {selectedNurseryId && (
+            <div>
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
+                <Sprout className="w-4 h-4" />
+                Asignar a planta (opcional)
+              </label>
+              {plants.length > 0 ? (
+                <select
+                  value={plantingId ?? ""}
+                  onChange={(e) => setPlantingId(e.target.value ? Number(e.target.value) : null)}
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                >
+                  <option value="">— General para el vivero —</option>
+                  {plants.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.speciesName} — #{p.id}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <div className="text-sm text-gray-500 bg-gray-50 rounded-lg p-3 border border-gray-200">
+                  No hay plantas en este vivero. <br />
+                  <a href="/plants" className="text-green-600 hover:underline">
+                    Agregar plantas primero
+                  </a>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Payload */}
           <div>
@@ -129,7 +215,8 @@ export default function AddTaskModal({ isOpen, onClose }: Props) {
           </button>
           <button
             onClick={handleAdd}
-            className="flex-1 px-4 py-2.5 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition-all"
+            disabled={!selectedNurseryId}
+            className="flex-1 px-4 py-2.5 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition-all disabled:bg-gray-300 disabled:cursor-not-allowed"
           >
             Guardar
           </button>

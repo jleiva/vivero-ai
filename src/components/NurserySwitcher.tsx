@@ -10,6 +10,7 @@ export function NurserySwitcher() {
   const [isOpen, setIsOpen] = useState(false);
   
   const nurseries = useLiveQuery(() => db.nurseries.toArray(), []) ?? [];
+  console.log('nurseries', nurseries);
   const activeNursery = useLiveQuery(async () => {
     return await nurseryService.getActiveNursery();
   }) ?? null;

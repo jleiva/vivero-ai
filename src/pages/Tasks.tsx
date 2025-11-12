@@ -2,15 +2,36 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "../db/db";
 import TaskCard from "../components/TaskCard";
 import AddTaskModal from "../components/AddTaskModal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import { Plus, ChevronDown, ChevronUp, RotateCcw } from "lucide-react";
+import { nurseryService } from "../services/nurseryService";
 
 export default function Tasks() {
   const [showSkipped, setShowSkipped] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const [activeNurseryId, setActiveNurseryId] = useState<number | null>(null);
 
-  const tasks = useLiveQuery(() => db.tasks.toArray(), []) ?? [];
+  // Load active nursery
+  useEffect(() => {
+    const loadActiveNursery = async () => {
+      const nursery = await nurseryService.getActiveNursery();
+      setActiveNurseryId(nursery?.id || null);
+    };
+    loadActiveNursery();
+  }, []);
+
+  // Get tasks filtered by active nursery
+  const allTasks = useLiveQuery(
+    async () => {
+      if (!activeNurseryId) return [];
+      return await db.tasks
+        .where("nurseryId")
+        .equals(activeNurseryId)
+        .toArray();
+    },
+    [activeNurseryId]
+  ) ?? [];
 
   const toggleTask = async (taskId: number, status: string) => {
     await db.tasks.update(taskId, {
@@ -29,16 +50,16 @@ export default function Tasks() {
   const today = dayjs().format("YYYY-MM-DD");
   const tomorrow = dayjs().add(1, "day").format("YYYY-MM-DD");
 
-  const todayTasks = tasks.filter(
+  const todayTasks = allTasks.filter(
     (t) => t.date === today && t.status !== "skipped"
   );
-  const tomorrowTasks = tasks.filter(
+  const tomorrowTasks = allTasks.filter(
     (t) => t.date === tomorrow && t.status !== "skipped"
   );
-  const upcoming = tasks.filter(
+  const upcoming = allTasks.filter(
     (t) => t.date > tomorrow && t.status !== "skipped"
   );
-  const skipped = tasks.filter((t) => t.status === "skipped");
+  const skipped = allTasks.filter((t) => t.status === "skipped");
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50">

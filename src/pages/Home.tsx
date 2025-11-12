@@ -1,19 +1,37 @@
-// ============================================
-// 6. Updated Home.tsx - Show Nursery Info
-// ============================================
 import { Link } from "react-router-dom";
-import { useTasks } from "../hooks/useTasks";
-import { useNursery } from "../hooks/useNursery";
-import { useSeason } from "../hooks/useSeason";
-import TaskCard from "../components/TaskCard";
-import { SeasonIndicator } from "../components/SeasonIndicator";
 import { db } from "../db/db";
-import { Sprout, Calendar, CheckCircle2, Plus, ArrowRight, Settings } from "lucide-react";
+import { Sprout, Calendar, CheckCircle2, ArrowRight } from "lucide-react";
+import { useLiveQuery } from "dexie-react-hooks";
+import { useState, useEffect } from "react";
+import { nurseryService } from "../services/nurseryService";
+import TaskCard from "../components/TaskCard";
 
-export default function HomeWithNursery() {
-  const todayTasks = useTasks();
-  const nursery = useNursery();
-  const seasonInfo = useSeason(nursery?.region || "guanacaste");
+export default function Home() {
+  const [activeNurseryId, setActiveNurseryId] = useState<number | null>(null);
+
+  // Load active nursery
+  useEffect(() => {
+    const loadActiveNursery = async () => {
+      const nursery = await nurseryService.getActiveNursery();
+      setActiveNurseryId(nursery?.id || null);
+    };
+    loadActiveNursery();
+  }, []);
+
+  // Get today's tasks for active nursery
+  const todayTasks = useLiveQuery(
+    async () => {
+      if (!activeNurseryId) return [];
+      
+      const today = new Date().toISOString().split("T")[0];
+      return await db.tasks
+        .where("nurseryId")
+        .equals(activeNurseryId)
+        .and((task) => task.date === today)
+        .toArray();
+    },
+    [activeNurseryId]
+  ) ?? [];
 
   const toggleTask = async (taskId: number, status: string) => {
     await db.tasks.update(taskId, {
@@ -33,52 +51,7 @@ export default function HomeWithNursery() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 shadow-sm top-0 z-10">
-        <div className="max-w-6xl mx-auto px-4 md:px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Sprout className="w-8 h-8 text-green-600" />
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">
-                {nursery?.name || "Vivero Maestro"}
-              </h1>
-              <p className="text-sm text-gray-500 capitalize">
-                {nursery?.region && `${nursery.region} • `}
-                {seasonInfo.seasonName}
-              </p>
-            </div>
-          </div>
-          
-          <div className="flex gap-2">
-            <Link
-              to="/tasks"
-              className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition-all"
-            >
-              Tareas
-            </Link>
-            <Link
-              to="/plants"
-              className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg font-medium transition-all"
-            >
-              Plantas
-            </Link>
-            <Link
-              to="/settings/nursery"
-              className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-all"
-              title="Configuración"
-            >
-              <Settings className="w-5 h-5" />
-            </Link>
-          </div>
-        </div>
-      </header>
-
       <main className="max-w-6xl mx-auto px-4 md:px-6 py-8">
-        {/* Season Indicator */}
-        <div className="mb-6">
-          <SeasonIndicator region={nursery?.region || "guanacaste"} />
-        </div>
-
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
