@@ -8,7 +8,6 @@ import SeasonCalendar from "./pages/SeasonCalendar";
 import NurserySetupWizard from "./pages/NurserySetupWizard";
 import NurserySettings from "./pages/NurserySettings";
 import { seedFakeTasks } from "./db/seedFakeTasks";
-// import { seedTestNursery } from "./db/seedTestNursery";
 import { speciesService } from "./services/speciesService";
 import { nurseryService } from "./services/nurseryService";
 import SplashScreen from "./components/SplashScreen";
@@ -18,12 +17,13 @@ export default function App() {
   const [isInitializing, setIsInitializing] = useState(true);
   const [initError, setInitError] = useState<string | null>(null);
   const [hasNursery, setHasNursery] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
 
-  // Function to check nursery status
   const checkNursery = async () => {
     const nurseryExists = await nurseryService.hasNursery();
     console.log('nurseryExists', nurseryExists);
     setHasNursery(nurseryExists);
+    setRefreshKey(prev => prev + 1); // Force re-render
     return nurseryExists;
   };
 
@@ -36,12 +36,7 @@ export default function App() {
         await speciesService.initialize();
 
         // Check if user has nursery
-        const nurseryExists = await checkNursery();
-
-        // Seed fake tasks only if nursery exists (for demo)
-        if (nurseryExists) {
-          await seedFakeTasks();
-        }
+        await checkNursery();
 
         console.log("✅ App initialization complete");
         setIsInitializing(false);
@@ -90,17 +85,16 @@ export default function App() {
 
   return (
     <>
-    <Navigation />
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/tasks" element={<Tasks />} />
-      <Route path="/plants" element={<Plants />} />
-      <Route path="/species" element={<SpeciesLibrary />} />
-      <Route path="/season" element={<SeasonCalendar />} />
-      <Route path="/settings/nursery" element={<NurserySettings />} />
-      <Route path="/setup" element={<Navigate to="/" replace />} />
-    </Routes>
+      <Navigation />
+      <Routes>
+        <Route path="/" element={<Home key={refreshKey} />} />
+        <Route path="/tasks" element={<Tasks />} />
+        <Route path="/plants" element={<Plants />} />
+        <Route path="/species" element={<SpeciesLibrary />} />
+        <Route path="/season" element={<SeasonCalendar />} />
+        <Route path="/settings/nursery" element={<NurserySettings />} />
+        <Route path="/setup" element={<NurserySetupWizard onComplete={checkNursery} />} />
+      </Routes>
     </>
-    
   );
 }

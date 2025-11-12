@@ -52,6 +52,12 @@ export interface Nursery {
   createdAt: Date;
 }
 
+export interface AppSettings {
+  id?: number;
+  activeNurseryId: number | null;
+  lastUpdated: Date;
+}
+
 export interface Planting {
   id?: number;
   nurseryId: number;
@@ -93,16 +99,18 @@ class NurseryDB extends Dexie {
   plantings!: Dexie.Table<Planting, number>;
   tasks!: Dexie.Table<Task, number>;
   inputLogs!: Dexie.Table<InputLog, number>;
+  appSettings!: Dexie.Table<AppSettings, number>;
 
   constructor() {
     super("ViveroMaestroDB");
 
-    this.version(1).stores({
+    this.version(2).stores({
       species: "++id, commonName, scientificName, category",
       nurseries: "++id, startMonth, region",
       plantings: "++id, nurseryId, speciesId",
       tasks: "++id, nurseryId, plantingId, date, status",
-      inputLogs: "++id, nurseryId, date, inputType"
+      inputLogs: "++id, nurseryId, date, inputType",
+      appSettings: "++id, activeNurseryId"
     });
 
     this.species = this.table("species");
@@ -110,6 +118,7 @@ class NurseryDB extends Dexie {
     this.plantings = this.table("plantings");
     this.tasks = this.table("tasks");
     this.inputLogs = this.table("inputLogs");
+    this.appSettings = this.table("appSettings");
   }
 }
 

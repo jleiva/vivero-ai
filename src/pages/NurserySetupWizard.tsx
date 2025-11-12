@@ -48,16 +48,19 @@ export default function NurserySetupWizard({ onComplete }: { onComplete?: () => 
   const handleComplete = async () => {
     setIsSubmitting(true);
     try {
-      await nurseryService.createNursery({
+      const nurseryId = await nurseryService.createNursery({
         name: data.name,
         region: data.region,
         startMonth: data.startMonth,
         language: "es",
       });
 
+      // Set as active
+      await nurseryService.setActiveNursery(nurseryId);
+
       // Call the callback if provided
       if (onComplete) {
-        onComplete();
+        await onComplete();
       }
 
       // Navigate to home

@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { Sprout, CheckCircle2, Leaf, Menu, X, BookOpen, SunIcon } from "lucide-react";
 import { useState } from "react";
+import { NurserySwitcher } from "./NurserySwitcher";
 
 export function Navigation() {
   const location = useLocation();
@@ -23,7 +24,7 @@ export function Navigation() {
             <Sprout className="w-8 h-8 text-green-600" />
             <h1 className="text-2xl font-bold text-gray-900">Vivero Maestro</h1>
           </Link>
-          
+          <NurserySwitcher />
           <div className="flex gap-2">
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -49,7 +50,7 @@ export function Navigation() {
       </nav>
 
       {/* Mobile Navigation */}
-      <nav className="md:hidden bg-white border-b border-gray-200 sticky top-0 z-20 shadow-sm">
+      <nav className="md:hidden bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
         <div className="px-4 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
             <Sprout className="w-7 h-7 text-green-600" />
