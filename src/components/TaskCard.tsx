@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { type Task } from "../db/db";
-import { Droplet, Leaf, FlaskConical, Scissors, Sprout, Flame, Plus } from "lucide-react";
+import { Droplet, Leaf, FlaskConical, Scissors, Sprout, Flame } from "lucide-react";
 import AddInputLogModal from "./AddInputLogModal";
 
 interface Props {
@@ -30,7 +30,7 @@ const categoryColors = {
 };
 
 // Map task categories to input log types
-const categoryToInputType = {
+const categoryToInputType: Record<string, string> = {
   water: "water",
   fertilize: "fertilizer",
   em: "em",
@@ -45,7 +45,20 @@ export default function TaskCard({ task, onToggle, onSkip }: Props) {
   const colorClass = categoryColors[task.category] || 'bg-gray-50 text-gray-700 border-gray-200';
 
   // Check if this task type can be logged
-  const canLog = ["water", "fertilize", "em", "compost", "bokashi", "woodash"].includes(task.category);
+  const isLoggable = categoryToInputType.hasOwnProperty(task.category);
+
+  const handleToggle = () => {
+    // If task is being completed (was pending, now completing)
+    if (!isCompleted && isLoggable) {
+      // First complete the task
+      onToggle();
+      // Then open log modal
+      setTimeout(() => setShowLogModal(true), 100);
+    } else {
+      // Just toggle (undo completion)
+      onToggle();
+    }
+  };
 
   return (
     <>
@@ -87,7 +100,7 @@ export default function TaskCard({ task, onToggle, onSkip }: Props) {
             
             <div className="flex gap-2 mt-3 flex-wrap">
               <button
-                onClick={onToggle}
+                onClick={handleToggle}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                   isCompleted
                     ? 'bg-amber-100 text-amber-700 hover:bg-amber-200'
@@ -105,28 +118,13 @@ export default function TaskCard({ task, onToggle, onSkip }: Props) {
                   Saltar
                 </button>
               )}
-
-              {/* Quick Log Button - Only for loggable task types */}
-              {canLog && !isCompleted && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowLogModal(true);
-                  }}
-                  className="px-3 py-2 rounded-lg text-sm font-medium bg-blue-100 text-blue-700 hover:bg-blue-200 transition-all flex items-center gap-1"
-                  title="Registrar aplicación"
-                >
-                  <Plus className="w-4 h-4" />
-                  Registrar
-                </button>
-              )}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Input Log Modal */}
-      {showLogModal && (
+      {/* Input Log Modal - Auto-opens on completion */}
+      {showLogModal && isLoggable && (
         <AddInputLogModal
           isOpen={showLogModal}
           onClose={() => setShowLogModal(false)}
@@ -134,6 +132,7 @@ export default function TaskCard({ task, onToggle, onSkip }: Props) {
           defaultInputType={categoryToInputType[task.category]}
           defaultPlantingId={task.plantingId || null}
           defaultDate={task.date}
+          defaultQuantity={task.payload?.dosage}
         />
       )}
     </>

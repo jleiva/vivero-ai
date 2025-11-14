@@ -12,6 +12,7 @@ interface Props {
   defaultInputType?: string;
   defaultPlantingId?: number | null;
   defaultDate?: string;
+  defaultQuantity?: string;
 }
 
 const INPUT_TYPES = [
@@ -29,7 +30,8 @@ export default function AddInputLogModal({
   taskId = null,
   defaultInputType = "water",
   defaultPlantingId = null,
-  defaultDate
+  defaultDate,
+  defaultQuantity
 }: Props) {
   const [date, setDate] = useState<string>(
     defaultDate || new Date().toISOString().slice(0, 10)
@@ -71,12 +73,31 @@ export default function AddInputLogModal({
     }
   }, [inputType]);
 
+  // Parse default quantity if provided (e.g., "2L" -> quantity: "2", units: "L")
+  useEffect(() => {
+    if (defaultQuantity && !quantity) {
+      // Try to parse quantity like "2L", "500ml", etc.
+      const match = defaultQuantity.match(/^([\d.]+)\s*([a-zA-Z]+)?$/);
+      if (match) {
+        setQuantity(match[1]);
+        if (match[2]) {
+          setUnits(match[2]);
+        }
+      } else {
+        // Just a number
+        setQuantity(defaultQuantity);
+      }
+    }
+  }, [defaultQuantity, quantity]);
+
   // Reset form when modal opens with new defaults
   useEffect(() => {
     if (isOpen) {
       setDate(defaultDate || new Date().toISOString().slice(0, 10));
       setInputType(defaultInputType);
       setPlantingId(defaultPlantingId);
+      setQuantity("");
+      setNotes("");
     }
   }, [isOpen, defaultDate, defaultInputType, defaultPlantingId]);
 
@@ -96,10 +117,6 @@ export default function AddInputLogModal({
         notes,
       });
 
-      // Reset form
-      setQuantity("");
-      setNotes("");
-      
       onClose();
     } catch (error) {
       console.error("Error creating log:", error);
@@ -109,9 +126,15 @@ export default function AddInputLogModal({
     }
   };
 
+  const handleSkip = () => {
+    // Just close without logging
+    onClose();
+  };
+
   if (!isOpen) return null;
 
   const selectedInputType = INPUT_TYPES.find(t => t.value === inputType);
+  const isFromTask = taskId !== null;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 p-4">
@@ -119,10 +142,10 @@ export default function AddInputLogModal({
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <h2 className="text-xl font-bold text-gray-900">
-            {taskId ? "Registrar Aplicación de Tarea" : "Registrar Aplicación"}
+            Registrar Aplicación
           </h2>
           <button
-            onClick={onClose}
+            onClick={handleSkip}
             className="p-2 hover:bg-gray-100 rounded-lg transition-all"
           >
             <X className="w-5 h-5 text-gray-500" />
@@ -131,11 +154,14 @@ export default function AddInputLogModal({
 
         {/* Body */}
         <div className="p-6 space-y-4">
-          {/* Show task indicator if from task */}
-          {taskId && (
-            <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
-              <p className="text-sm text-blue-800">
-                📋 Registrando aplicación para tarea #{taskId}
+          {/* Info message if from task */}
+          {isFromTask && (
+            <div className="bg-green-50 rounded-lg p-4 border border-green-200">
+              <p className="text-sm text-green-800 font-medium mb-2">
+                ✅ Tarea completada
+              </p>
+              <p className="text-sm text-green-700">
+                Registra la cantidad aplicada para llevar control de tus insumos.
               </p>
             </div>
           )}
@@ -213,7 +239,7 @@ export default function AddInputLogModal({
             <div>
               <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
                 <Droplet className="w-4 h-4" />
-                Aplicado a (opcional)
+                Aplicado a
               </label>
               <select
                 value={plantingId ?? ""}
@@ -248,17 +274,17 @@ export default function AddInputLogModal({
         {/* Footer */}
         <div className="flex gap-3 p-6 border-t border-gray-200">
           <button
-            onClick={onClose}
+            onClick={handleSkip}
             className="flex-1 px-4 py-2.5 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-all"
           >
-            Cancelar
+            Omitir
           </button>
           <button
             onClick={handleSubmit}
             disabled={!activeNurseryId || !quantity || isSubmitting}
             className="flex-1 px-4 py-2.5 rounded-lg bg-green-600 text-white font-medium hover:bg-green-700 transition-all disabled:bg-gray-300 disabled:cursor-not-allowed"
           >
-            {isSubmitting ? "Guardando..." : "Guardar"}
+            {isSubmitting ? "Guardando..." : "Registrar"}
           </button>
         </div>
       </div>
