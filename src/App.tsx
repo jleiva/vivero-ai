@@ -12,6 +12,7 @@ import { speciesService } from "./services/speciesService";
 import { nurseryService } from "./services/nurseryService";
 import SplashScreen from "./components/SplashScreen";
 import { Navigation } from "./components/Navigation";
+import InputLogs from "./pages/InputLogs";
 
 export default function App() {
   const [isInitializing, setIsInitializing] = useState(true);
@@ -92,6 +93,7 @@ export default function App() {
         <Route path="/plants" element={<Plants />} />
         <Route path="/species" element={<SpeciesLibrary />} />
         <Route path="/season" element={<SeasonCalendar />} />
+        <Route path="/logs" element={<InputLogs />} />
         <Route path="/settings/nursery" element={<NurserySettings />} />
         <Route path="/setup" element={<NurserySetupWizard onComplete={checkNursery} />} />
       </Routes>

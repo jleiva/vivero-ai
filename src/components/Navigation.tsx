@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Sprout, CheckCircle2, Leaf, Menu, X, Settings, BookOpen } from "lucide-react";
+import { Sprout, CheckCircle2, Leaf, Menu, X, Settings, BookOpen, Beaker } from "lucide-react";
 import { useState } from "react";
 import { NurserySwitcher } from "./NurserySwitcher";
 import { useNursery } from "../hooks/useNursery";
@@ -13,6 +13,7 @@ export function Navigation() {
     { path: "/", label: "Inicio", icon: Sprout },
     { path: "/tasks", label: "Tareas", icon: CheckCircle2 },
     { path: "/plants", label: "Plantas", icon: Leaf },
+    { path: "/logs", label: "Registros", icon: Beaker },
     { path: "/species", label: "Especies", icon: BookOpen },
   ];
 

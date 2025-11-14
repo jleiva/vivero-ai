@@ -85,11 +85,13 @@ export interface InputLog {
   id?: number;
   nurseryId: number;
   taskId?: number | null;
+  plantingId?: number | null;
   date: string;
-  inputType: string;
+  inputType: string; // "water", "em", "compost_tea", "bokashi", "wood_ash", "fertilizer"
   quantity: number;
-  units: string;
+  units: string; // "L", "ml", "kg", "g", "cups"
   notes?: string;
+  createdAt: Date;
 }
 
 // -------- DB Class --------
