@@ -3,6 +3,7 @@ import { db } from "../db/db";
 import { useLiveQuery } from "dexie-react-hooks";
 import { X, Calendar, Tag, FileText, Sprout, Home } from "lucide-react";
 import { nurseryService } from "../services/nurseryService";
+import { getTodayLocal } from "../utils/dateHelpers";
 
 interface Props {
   isOpen: boolean;
@@ -10,7 +11,7 @@ interface Props {
 }
 
 export default function AddTaskModal({ isOpen, onClose }: Props) {
-  const [date, setDate] = useState<string>(new Date().toISOString().slice(0, 10));
+  const [date, setDate] = useState<string>(getTodayLocal());
   const [category, setCategory] = useState<string>("water");
   const [payload, setPayload] = useState<string>("");
   const [plantingId, setPlantingId] = useState<number | null>(null);
@@ -67,7 +68,7 @@ export default function AddTaskModal({ isOpen, onClose }: Props) {
     });
 
     // Reset form
-    setDate(new Date().toISOString().slice(0, 10));
+    setDate(getTodayLocal());
     setCategory("water");
     setPayload("");
     setPlantingId(null);
@@ -101,7 +102,7 @@ export default function AddTaskModal({ isOpen, onClose }: Props) {
                 value={selectedNurseryId ?? ""}
                 onChange={(e) => {
                   setSelectedNurseryId(e.target.value ? Number(e.target.value) : null);
-                  setPlantingId(null); // Reset plant selection when nursery changes
+                  setPlantingId(null);
                 }}
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
               >

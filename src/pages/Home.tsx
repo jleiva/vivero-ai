@@ -5,6 +5,7 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { useState, useEffect } from "react";
 import { nurseryService } from "../services/nurseryService";
 import TaskCard from "../components/TaskCard";
+import { getTodayLocal } from "../utils/dateHelpers";
 
 export default function Home() {
   const [activeNurseryId, setActiveNurseryId] = useState<number | null>(null);
@@ -23,7 +24,8 @@ export default function Home() {
     async () => {
       if (!activeNurseryId) return [];
       
-      const today = new Date().toISOString().split("T")[0];
+      const today = getTodayLocal();
+      
       return await db.tasks
         .where("nurseryId")
         .equals(activeNurseryId)

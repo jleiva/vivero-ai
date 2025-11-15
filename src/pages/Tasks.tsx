@@ -3,9 +3,9 @@ import { db } from "../db/db";
 import TaskCard from "../components/TaskCard";
 import AddTaskModal from "../components/AddTaskModal";
 import { useState, useEffect } from "react";
-import dayjs from "dayjs";
 import { Plus, ChevronDown, ChevronUp, RotateCcw } from "lucide-react";
 import { nurseryService } from "../services/nurseryService";
+import { getTodayLocal, getTomorrowLocal } from "../utils/dateHelpers";
 
 export default function Tasks() {
   const [showSkipped, setShowSkipped] = useState(false);
@@ -47,8 +47,9 @@ export default function Tasks() {
     });
   };
 
-  const today = dayjs().format("YYYY-MM-DD");
-  const tomorrow = dayjs().add(1, "day").format("YYYY-MM-DD");
+  // Use local timezone dates
+  const today = getTodayLocal();
+  const tomorrow = getTomorrowLocal();
 
   const todayTasks = allTasks.filter(
     (t) => t.date === today && t.status !== "skipped"
