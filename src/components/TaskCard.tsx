@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { type Task } from "../db/db";
-import { Droplet, Leaf, FlaskConical, Scissors, Sprout, Flame } from "lucide-react";
+import { Droplet, Leaf, FlaskConical, Scissors, Sprout, Flame, Edit2 } from "lucide-react";
 import AddInputLogModal from "./AddInputLogModal";
 
 interface Props {
   task: Task;
   onToggle: () => void;
   onSkip: () => void;
+  onEdit: () => void;
 }
 
 const categoryIcons = {
@@ -39,7 +40,7 @@ const categoryToInputType: Record<string, string> = {
   woodash: "wood_ash",
 };
 
-export default function TaskCard({ task, onToggle, onSkip }: Props) {
+export default function TaskCard({ task, onToggle, onSkip, onEdit }: Props) {
   const [showLogModal, setShowLogModal] = useState(false);
   const isCompleted = task.status === "completed";
   const colorClass = categoryColors[task.category] || 'bg-gray-50 text-gray-700 border-gray-200';
@@ -82,7 +83,16 @@ export default function TaskCard({ task, onToggle, onSkip }: Props) {
                   </span>
                 )}
               </div>
-              <span className="text-xs text-gray-500 font-medium">{task.date}</span>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-gray-500 font-medium">{task.date}</span>
+                <button
+                  onClick={onEdit}
+                  className="p-1.5 hover:bg-gray-100 rounded-lg transition-all"
+                  title="Editar tarea"
+                >
+                  <Edit2 className="w-4 h-4 text-gray-600" />
+                </button>
+              </div>
             </div>
             
             {task.payload?.dosage && (

@@ -5,10 +5,14 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { useState, useEffect } from "react";
 import { nurseryService } from "../services/nurseryService";
 import TaskCard from "../components/TaskCard";
+import EditTaskModal from "../components/EditTaskModal";
 import { getTodayLocal } from "../utils/dateHelpers";
+import { type Task } from "../db/db";
 
 export default function Home() {
   const [activeNurseryId, setActiveNurseryId] = useState<number | null>(null);
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   // Load active nursery
   useEffect(() => {
@@ -113,6 +117,10 @@ export default function Home() {
                 task={task}
                 onToggle={() => toggleTask(task.id!, task.status)}
                 onSkip={() => skipTask(task.id!)}
+                onEdit={() => {
+                  setEditingTask(task);
+                  setIsEditModalOpen(true);
+                }}
               />
             ))
           )}
@@ -133,6 +141,14 @@ export default function Home() {
           <Sprout className="w-4 h-4" />
           Ver Plantas
         </Link>
+        <EditTaskModal
+          isOpen={isEditModalOpen}
+          onClose={() => {
+            setIsEditModalOpen(false);
+            setEditingTask(null);
+          }}
+          task={editingTask}
+        />
       </main>
     </div>
   );

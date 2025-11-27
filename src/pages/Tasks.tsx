@@ -1,7 +1,8 @@
 import { useLiveQuery } from "dexie-react-hooks";
-import { db } from "../db/db";
+import { db, type Task } from "../db/db";
 import TaskCard from "../components/TaskCard";
 import AddTaskModal from "../components/AddTaskModal";
+import EditTaskModal from "../components/EditTaskModal";
 import { useState, useEffect } from "react";
 import { Plus, ChevronDown, ChevronUp, RotateCcw } from "lucide-react";
 import { nurseryService } from "../services/nurseryService";
@@ -11,6 +12,8 @@ export default function Tasks() {
   const [showSkipped, setShowSkipped] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [activeNurseryId, setActiveNurseryId] = useState<number | null>(null);
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   // Load active nursery
   useEffect(() => {
@@ -90,6 +93,10 @@ export default function Tasks() {
                 task={task}
                 onToggle={() => toggleTask(task.id!, task.status)}
                 onSkip={() => skipTask(task.id!)}
+                onEdit={() => {
+                  setEditingTask(task);
+                  setIsEditModalOpen(true);
+                }}
               />
             ))
           )}
@@ -109,6 +116,10 @@ export default function Tasks() {
                 task={task}
                 onToggle={() => toggleTask(task.id!, task.status)}
                 onSkip={() => skipTask(task.id!)}
+                onEdit={() => {
+                  setEditingTask(task);
+                  setIsEditModalOpen(true);
+                }}
               />
             ))
           )}
@@ -128,6 +139,10 @@ export default function Tasks() {
                 task={task}
                 onToggle={() => toggleTask(task.id!, task.status)}
                 onSkip={() => skipTask(task.id!)}
+                onEdit={() => {
+                  setEditingTask(task);
+                  setIsEditModalOpen(true);
+                }}
               />
             ))
           )}
@@ -174,6 +189,10 @@ export default function Tasks() {
                     task={task}
                     onToggle={() => toggleTask(task.id!, task.status)}
                     onSkip={() => skipTask(task.id!)}
+                    onEdit={() => {
+                      setEditingTask(task);
+                      setIsEditModalOpen(true);
+                    }}
                   />
                 ))}
               </div>
@@ -183,6 +202,14 @@ export default function Tasks() {
       </div>
 
       <AddTaskModal isOpen={openModal} onClose={() => setOpenModal(false)} />
+      <EditTaskModal
+          isOpen={isEditModalOpen}
+          onClose={() => {
+            setIsEditModalOpen(false);
+            setEditingTask(null);
+          }}
+          task={editingTask}
+        />
     </div>
   );
 }
